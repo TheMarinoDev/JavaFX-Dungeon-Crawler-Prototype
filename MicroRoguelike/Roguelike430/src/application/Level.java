@@ -35,7 +35,8 @@ public class Level {
 		//Next loop NumRoom times starting at i = 1 to place the rest
 		for(int i = 0; i < NumRooms; i++) {
 			Cell pos = GetRandomAdjecentCell();
-			Rooms.add(new Room(pos.getX(),pos.getY()));
+			if(getRoomAt(pos.getX(),pos.getY()) == null)
+				Rooms.add(new Room(pos.getX(),pos.getY()));
 		}
 		
 		//Next, set the neighbors for each room
@@ -52,8 +53,15 @@ public class Level {
 		//Place n enemies
 		
 		//Place n items (n = 0 is a sword, the rest add points)
+		for(int i = 0; i < NumItems; i++) {
+			if(i == 0)
+				Rooms.get(new Random().nextInt(Rooms.size())).SpawnEntity(1);
+			else
+				Rooms.get(new Random().nextInt(Rooms.size())).SpawnEntity(2);
+		}
 		
 		CurrentRoom = Rooms.get(0);
+		CurrentRoom.CheckForEntered();
 		
 	}
 	
@@ -64,6 +72,8 @@ public class Level {
 		GUIManager.getInstance().DrawRoom(CurrentRoom.getLayout());
 		GUIManager.getInstance().DrawRoomEntities(CurrentRoom.GetEntities());
 		GUIManager.getInstance().DrawMiniMap(this, CurrentRoom.getX(), CurrentRoom.getY());
+		
+		CurrentRoom.CheckForEntered();
 	}
 	
 	private Cell GetRandomAdjecentCell()

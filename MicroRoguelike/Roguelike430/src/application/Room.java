@@ -18,11 +18,14 @@ public class Room {
 	
 	private int PosX;
 	private int PosY;
+	private boolean HasBeenEntered;
 	
 	/*
 	 * Constructor for a room, automatically generates a default layout
 	 */
 	public Room(int X, int Y) {
+		HasBeenEntered = false;
+		
 		PosX = X;
 		PosY = Y;
 		
@@ -100,6 +103,16 @@ public class Room {
 				Key k = new Key(c.getX(),c.getY(),'*');
 				Entities.add(k);				
 				break;
+			case 1://Spawn a Sword
+				Sword s = new Sword(c.getX(),c.getY(),'/');
+				Entities.add(s);				
+				break;
+			case 2://Spawn an Item
+				Item i = new Item(c.getX(),c.getY(),'#');
+				Entities.add(i);				
+				break;
+			case 3://Spawn an Enemy		
+				break;
 		}
 		
 		Spawns.remove(c);
@@ -109,5 +122,11 @@ public class Room {
 		Layout[4][3] = 'E';
 		Layout[3][4] = 'E';
 		Layout[4][4] = 'E';
+	}
+	public void CheckForEntered() {
+		if(!HasBeenEntered) {
+			GameManager.GetInstance().addScore(50);
+			HasBeenEntered = true;
+		}
 	}
 }

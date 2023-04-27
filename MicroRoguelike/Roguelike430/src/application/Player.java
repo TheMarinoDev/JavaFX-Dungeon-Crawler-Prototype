@@ -62,7 +62,7 @@ public class Player extends GridEntity{
             		if(GameManager.GetInstance().GetCurrentLevel().GetCurrentRoom().getLayout()[X][Y] == 'E' && GameManager.GetInstance().isKeyHeld()) {
             			//End this level and move on the the next level
             			//Load a different scene, but for now just start a new level
-            			GameManager.GetInstance().GenerateNewLevel();
+            			GUIManager.getInstance().setScene(GUIManager.getInstance().getLevelCompleteScene());
             		}
             		else {
             			//disable Movement

@@ -13,7 +13,7 @@ public class Key extends GridEntity{
 		if(X == GetX() && Y == GetY()) {
 			//Obtain the key
 				GameManager.GetInstance().setKeyHeld();
-				GameManager.GetInstance().addScore(GridChar);
+				GameManager.GetInstance().addScore(25);
 			//Make this entity invisible and uninteractable
 			GridChar = ' ';
 			PickedUp = true;

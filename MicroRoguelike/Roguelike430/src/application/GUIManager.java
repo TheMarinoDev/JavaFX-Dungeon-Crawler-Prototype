@@ -17,11 +17,14 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
 public class GUIManager {
 	
 	private static GUIManager instance;
+	
+	private Stage theStage;
     /*
      * Title Scene Variables
      */
@@ -43,6 +46,12 @@ public class GUIManager {
     
     private ImageView SwordIcon;
     private ImageView KeyIcon;
+    
+    /*
+     * Level Scene
+     * 
+     */
+    private Scene ContinueScene;
     
     private String ImageDirectory = "file:///E:/CSC430/MicroRoguelike/Roguelike430/src/application/Graphics/"; //Temporary: this is a quick work around.
     //Ideally the image should be able to be located without having to deal with the directory.
@@ -75,10 +84,9 @@ public class GUIManager {
         Button startButton = new Button("Start Game");
         
         startButton.setOnAction(e -> {
-            Stage primaryStage = (Stage) startButton.getScene().getWindow();
-            primaryStage.hide();
-            primaryStage.setScene(GameplayScene);
-            primaryStage.show();
+            theStage = (Stage) startButton.getScene().getWindow();
+            GameManager.GetInstance().ResetGame();
+            setScene(GameplayScene);
         });
 
         // Add highscore label, title label, and start button to a vertical box
@@ -182,13 +190,33 @@ public class GUIManager {
         GameplayScene = new Scene(borderPane, 720, 515);
         GameplayScene.setFill(Color.LIGHTGRAY);
 
-        // Set the stage's title and scene, then show the stage
         
         
-        //primaryStage.setResizable(false);
-        //primaryStage.setTitle("Roguelike Prototype");
-        //primaryStage.setScene(gameplayScene);
-        //primaryStage.show();
+        
+        /* 
+		 * LEVEL COMPLETE SCREEN
+		 * 
+		 */
+        Label completeLabel = new Label("Level Complete!");
+        completeLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 24));
+        completeLabel.setTextAlignment(TextAlignment.CENTER); // Center the text
+
+        // Create a button with the label "Play Next Level"
+        Button continueButton = new Button("Play Next Level");
+
+        // Create a VBox to hold the label and button
+        VBox continueVbox = new VBox(20); // Set the spacing between the components
+        continueVbox.getChildren().addAll(completeLabel, continueButton); // Add the label and button to the VBox
+        continueVbox.setAlignment(Pos.CENTER);
+        continueButton.setOnAction(e -> {
+        	GameManager.GetInstance().GenerateNewLevel();
+        	setScene(GameplayScene);
+        });
+
+        // Create a scene with the VBox as the root node
+        ContinueScene = new Scene(continueVbox, 640, 480); // Set the width and height of the scene
+        
+        
     }//
 	
 	/*
@@ -211,15 +239,25 @@ public class GUIManager {
 	public void DrawEntity(int x, int y, char c) {
 		if(x > 7 || x < 0 || y > 7 || y < 0)return;
 	         switch(c) {
-	         case (' '):
+	         case (' ')://empty
 	         	 EntityGrid[x][y].setImage(new Image(ImageDirectory + "empty.png"));
 	         break;
-	         case ('?'):
+	         case ('?')://player
 	        	 EntityGrid[x][y].setImage(new Image(ImageDirectory + "phEntity.png"));
 	         break;
-	         case ('*'):
+	         case ('*')://key
 	        	 EntityGrid[x][y].setImage(new Image(ImageDirectory + "key.png"));
 	         break;
+	         case ('#')://item
+	        	 EntityGrid[x][y].setImage(new Image(ImageDirectory + "item.png"));
+	         break;
+	         case ('/')://sword
+	        	 EntityGrid[x][y].setImage(new Image(ImageDirectory + "sword.png"));
+	         break;
+	         case ('!')://enemy
+	        	 EntityGrid[x][y].setImage(new Image(ImageDirectory + "enemy.png"));
+	         break;
+
 	       }
 	    }
 	/*
@@ -329,6 +367,12 @@ public class GUIManager {
     		KeyIcon.setImage(new Image(ImageDirectory + "key.png"));
     	else
     		KeyIcon.setImage(new Image(ImageDirectory + "empty.png"));
+    	
+    	//Sword Icon
+    	if(GM.isSwordHeld())
+    		SwordIcon.setImage(new Image(ImageDirectory + "sword.png"));
+    	else
+    		SwordIcon.setImage(new Image(ImageDirectory + "empty.png"));
     	//Score
     	ScoreLabel.setText("Score: " + GM.getScore());
     	LevelLabel.setText("Level " + GM.getLevel());
@@ -337,11 +381,23 @@ public class GUIManager {
     /*
      * Getters and Setters
      */
+    public void setScene(Scene s ) {
+    	theStage.hide();
+    	theStage.setScene(s);
+    	theStage.show();
+    }
     public Scene getGameplayScene() {
     	return GameplayScene;
     }
     
     public Scene getTitleScene() {
+    	return TitleScene;
+    }
+    
+    public Scene getLevelCompleteScene() {
+    	return ContinueScene;
+    }
+    public Scene getGameOverScene() {
     	return TitleScene;
     }
 }

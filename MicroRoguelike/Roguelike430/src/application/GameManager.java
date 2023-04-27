@@ -14,7 +14,8 @@ public class GameManager {
 	public GameManager() {
 		instance = this;
 		
-		GenerateNewLevel();
+		thePlayer = new Player(4,4,'?');
+		ResetGame();
 	}
 	
 	public static GameManager GetInstance() {
@@ -32,19 +33,23 @@ public class GameManager {
 		Level++;
 		
 		CurrentLevel = new Level(2+(Level * 2),Level,1+Level + Level/2);
-		thePlayer = new Player(4,4,'?');
 		
 		//draw grid
 		if(GUIManager.getInstance() != null)
 			GUIManager.getInstance().DrawRoom((CurrentLevel.GetCurrentRoom().getLayout()));
 		
+		addScore(200);
 		//update Gui
 		GUIManager.getInstance().UpdateGUIStats();
 	}
 	
 	public void ResetGame() {
 		Level = 0;
-		Score = 0;
+		Score = -250;//Entering the first room grants you 250 score
+		KeyHeld = false;
+		SwordHeld = false;
+		
+		GenerateNewLevel();
 	}
 
 	public Player getPlayer() {
