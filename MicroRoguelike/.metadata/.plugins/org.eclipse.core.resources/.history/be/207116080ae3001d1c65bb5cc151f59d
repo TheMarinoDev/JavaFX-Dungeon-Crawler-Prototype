@@ -1,0 +1,343 @@
+package application;
+	
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.stage.Stage;
+
+public class GUIManager {
+	
+	private static GUIManager instance;
+    /*
+     * Title Scene Variables
+     */
+    private Scene TitleScene;
+    
+    private Label HighscoreLabel;
+    
+    /*
+     * Gameplay Scene Variables
+     */
+    private Scene GameplayScene;
+    
+    private Label ScoreLabel;
+    private Label LevelLabel;
+    
+    private ImageView[][] TileGrid;
+    private ImageView[][] EntityGrid;
+    private ImageView[][] MapGrid;
+    
+    private ImageView SwordIcon;
+    private ImageView KeyIcon;
+    
+    private String ImageDirectory = "file:///E:/CSC430/MicroRoguelike/Roguelike430/src/application/Graphics/"; //Temporary: this is a quick work around.
+    //Ideally the image should be able to be located without having to deal with the directory.
+    
+    /*
+     * Constructor for GUI Manager
+     * 
+     * This constructor is LARGE!
+     * It will generate all the neccessary scenes needed for the software to function!
+     */
+	public GUIManager() {
+		
+		instance = this;
+		/* 
+		 * TITLE SCREEN
+		 * 
+		 */
+		ImageDirectory = "file:/" + System.getProperty("user.dir") + "/src/application/Graphics/";
+		System.out.println("Image Directory: " + ImageDirectory + "  (This is a temporary solution to this issue)");
+        // Create highscore label
+		
+        HighscoreLabel = new Label("Highscore: 0");
+        HighscoreLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 18));
+
+        // Create title label
+        Label titleLabel = new Label("Roguelike Game");
+        titleLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 24));
+
+        // Create start button
+        Button startButton = new Button("Start Game");
+        
+        startButton.setOnAction(e -> {
+            Stage primaryStage = (Stage) startButton.getScene().getWindow();
+            primaryStage.hide();
+            primaryStage.setScene(GameplayScene);
+            primaryStage.show();
+        });
+
+        // Add highscore label, title label, and start button to a vertical box
+        VBox titleScreen = new VBox(20);
+        titleScreen.setAlignment(Pos.CENTER);
+        titleScreen.getChildren().addAll(HighscoreLabel, titleLabel, startButton);
+
+        // Create a scene and add the vertical box to it
+        TitleScene = new Scene(titleScreen, 640, 480);
+        TitleScene.setFill(Color.LIGHTGRAY);
+         
+        
+        
+        /* 
+		 * GAMEPLAY SCREEN
+		 * 
+		 */
+        
+     // Create score label
+        ScoreLabel = new Label("Score: 0");
+        ScoreLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 24));
+
+        // Create grid for the current room's tile layout
+        GridPane tileGrid = createTileGrid();
+        tileGrid.setAlignment(Pos.CENTER);
+        fillGridPane(tileGrid, ImageDirectory + "phTile.png");
+        
+        // Create grid for the current room's entity positions
+        GridPane entityGrid = createEntityGrid();
+        entityGrid.setAlignment(Pos.CENTER);
+        fillGridPane(entityGrid, ImageDirectory + "empty.png");
+        
+        // Create a stack pane to stack the entities on top of the tiles
+        StackPane gameplayGrid = new StackPane();
+        gameplayGrid.getChildren().addAll(tileGrid,entityGrid);
+
+        // Create minimap grid
+        GridPane minimapGrid = createMinimapGrid();
+        minimapGrid.setStyle("-fx-border-color: black;");
+        fillGridPane(minimapGrid, ImageDirectory + "empty.png");
+
+        // Create level label
+        LevelLabel = new Label("Level 1");
+        LevelLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 14));
+
+        // Create top HBox with score label
+        HBox topBox = new HBox(10);
+        topBox.setAlignment(Pos.TOP_CENTER);
+        topBox.getChildren().add(ScoreLabel);
+
+        // Create bottom VBox with minimap grid and level label
+        VBox bottomBox = new VBox(10);
+        bottomBox.setAlignment(Pos.CENTER);
+        bottomBox.getChildren().addAll(LevelLabel, minimapGrid);
+        
+        VBox gameplayBox = new VBox(10);
+        gameplayBox.setAlignment(Pos.CENTER);
+        gameplayBox.getChildren().add(gameplayGrid);
+        
+        //VBox gameplayBox = new VBox(10);
+        //bottomBox.setAlignment(Pos.CENTER);
+        //bottomBox.getChildren().addAll(gameplayGrid);
+        
+        Label itemsLabel = new Label("Items Collected");
+        itemsLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 16));
+
+        // create the image views
+        SwordIcon = new ImageView(ImageDirectory + "empty.png");
+        KeyIcon = new ImageView(ImageDirectory + "empty.png");
+        
+        SwordIcon.setFitWidth(48);
+        SwordIcon.setFitHeight(48);
+        
+        KeyIcon.setFitWidth(48);
+        KeyIcon.setFitHeight(48);
+
+        // encapsulate the image views in a VBox
+        HBox itemsHBox = new HBox(10);
+     	itemsHBox.getChildren().addAll(SwordIcon,KeyIcon);
+     	itemsHBox.setAlignment(Pos.CENTER);
+
+     	// encapsulate the label and VBox in another VBox
+     	VBox itemsCollectedVBox = new VBox(10);
+     	itemsCollectedVBox.getChildren().addAll(itemsLabel, itemsHBox);
+     	itemsCollectedVBox.setAlignment(Pos.CENTER);
+
+        // Create BorderPane with gameplay grid on the right and top and bottom boxes on the left
+        BorderPane borderPane = new BorderPane();
+        borderPane.setCenter(gameplayBox);
+        borderPane.setTop(topBox);
+        borderPane.setLeft(bottomBox);
+        borderPane.setRight(itemsCollectedVBox);
+        BorderPane.setMargin(gameplayGrid, new Insets(10, 10, 10, 10));
+        BorderPane.setMargin(topBox, new Insets(10, 10, 10, 10));
+        BorderPane.setMargin(bottomBox, new Insets(10, 10, 10, 10));
+        BorderPane.setMargin(itemsCollectedVBox, new Insets(10, 10, 10, 10));
+        borderPane.autosize();
+        
+
+        // Create scene
+        GameplayScene = new Scene(borderPane, 720, 515);
+        GameplayScene.setFill(Color.LIGHTGRAY);
+
+        // Set the stage's title and scene, then show the stage
+        
+        
+        //primaryStage.setResizable(false);
+        //primaryStage.setTitle("Roguelike Prototype");
+        //primaryStage.setScene(gameplayScene);
+        //primaryStage.show();
+    }//
+	
+	/*
+	 * Returns the current instance of GUIManager
+	 */
+	public static GUIManager getInstance() {
+		return instance;
+	}
+	
+	/*
+	 * This function takes in a char 2d array and draws the game grid accordingly
+	 * 
+	 * @param layout This should be coming from a Room object (Room.getLayout();)
+	 */
+	public void DrawInteractables(List<Interactable> objs) {
+		if(x > 7 || x < 0 || y > 7 || y < 0)return;
+	         switch(c) {
+	         case (' '):
+	         	 EntityGrid[x][y].setImage(new Image(ImageDirectory + "empty.png"));
+	          	 break;
+	         case ('?'):
+	        	 EntityGrid[x][y].setImage(new Image(ImageDirectory + "phEntity.png"));
+	         case ('*'):
+	        	 EntityGrid[x][y].setImage(new Image(ImageDirectory + "phEntity.png"));
+	         break;
+	       }
+	    }
+	public void DrawEntity(int x, int y, char c) {
+		if(x > 7 || x < 0 || y > 7 || y < 0)return;
+	         switch(c) {
+	         case (' '):
+	         	 EntityGrid[x][y].setImage(new Image(ImageDirectory + "empty.png"));
+	          	 break;
+	         case ('?'):
+	        	 EntityGrid[x][y].setImage(new Image(ImageDirectory + "phEntity.png"));
+	         case ('*'):
+	        	 EntityGrid[x][y].setImage(new Image(ImageDirectory + "phEntity.png"));
+	         break;
+	       }
+	    }
+	public void DrawRoom(char[][] layout) {
+  	  for (int x = 0; x < 8; x++) {
+            for (int y = 0; y < 8; y++) {
+          	  switch(layout[x][y]) {
+          	  case ('W'):
+          		  TileGrid[x][y].setImage(new Image(ImageDirectory + "wall.png"));
+          		  break;
+          	  case ('E'):
+        		  TileGrid[x][y].setImage(new Image(ImageDirectory + "end.png"));
+        		  break;
+          	  case ('F'):
+          		  TileGrid[x][y].setImage(new Image(ImageDirectory + "floor.png"));
+      		  	break;
+          	  }
+          }
+  	  }
+ }
+  	  
+  	public void DrawMiniMap(Level lvl, int X, int Y) {
+   for (int i = -2; i < 3; i++) {
+    	for (int j = -2; j < 3; j++) {
+    		if(lvl.containsRoomAt(X + i, Y - j))
+    					  MapGrid[i + 2][j + 2].setImage(new Image(ImageDirectory + "phMap.png"));
+    		else
+    			MapGrid[i + 2][j + 2].setImage(new Image(ImageDirectory + "empty.png"));
+            }
+        }
+ }
+	
+	/*
+	 * Helper functions for ConstructingGUIs
+	 */
+	
+	private GridPane createTileGrid() {
+		TileGrid = new ImageView[8][8];
+        GridPane gridPane = new GridPane();
+        gridPane.setHgap(0);
+        gridPane.setVgap(0);
+        for (int x = 0; x < 8; x++) {
+            for (int y = 0; y < 8; y++) {
+                ImageView imageView = new ImageView();
+                imageView.setFitWidth(48);
+                imageView.setFitHeight(48);
+                gridPane.add(imageView, x, y);
+                TileGrid[x][y] = imageView;
+            }
+        }
+        return gridPane;
+    }
+	
+	private GridPane createEntityGrid() {
+		EntityGrid = new ImageView[8][8];
+        GridPane gridPane = new GridPane();
+        gridPane.setHgap(0);
+        gridPane.setVgap(0);
+        for (int x = 0; x < 8; x++) {
+            for (int y = 0; y < 8; y++) {
+                ImageView imageView = new ImageView();
+                imageView.setFitWidth(48);
+                imageView.setFitHeight(48);
+                gridPane.add(imageView, x, y);
+                EntityGrid[x][y] = imageView;
+            }
+        }
+        return gridPane;
+    }
+	
+	private GridPane createMinimapGrid() {
+		MapGrid = new ImageView[5][5];
+        GridPane gridPane = new GridPane();
+        gridPane.setHgap(2);
+        gridPane.setVgap(2);
+        for (int x = 0; x < 5; x++) {
+            for (int y = 0; y < 5; y++) {
+                ImageView imageView = new ImageView();
+                imageView.setFitWidth(24);
+                imageView.setFitHeight(24);
+                gridPane.add(imageView, x, y);
+                MapGrid[x][y] = imageView;
+            }
+        }
+        return gridPane;
+    }
+
+    private void fillGridPane(GridPane gridPane, String tileImageFile) {
+        for (int i = 0; i < gridPane.getChildren().size(); i++) {
+            ImageView imageView = (ImageView) gridPane.getChildren().get(i);
+            imageView.setImage(new Image(tileImageFile));
+        }
+    }   
+    
+    public void UpdateGUIStats() {
+    	GameManager GM = GameManager.GetInstance();
+    	//Key Icon
+    	if(GM.isKeyHeld())
+    		KeyIcon.setImage(new Image(ImageDirectory + "key.png"));
+    	else
+    		KeyIcon.setImage(new Image(ImageDirectory + "empty.png"));
+    	//Score
+    	ScoreLabel.setText("Score: " + GM.getScore());
+    	LevelLabel.setText("Level " + GM.getLevel());
+    }
+    
+    /*
+     * Getters and Setters
+     */
+    public Scene getGameplayScene() {
+    	return GameplayScene;
+    }
+    
+    public Scene getTitleScene() {
+    	return TitleScene;
+    }
+}

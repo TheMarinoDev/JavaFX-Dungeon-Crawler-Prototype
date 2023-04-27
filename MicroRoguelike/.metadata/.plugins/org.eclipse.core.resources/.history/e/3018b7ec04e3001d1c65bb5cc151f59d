@@ -1,0 +1,18 @@
+package application;
+
+public class Key extends GridEntity implements Interactable{
+
+	public Key(int X, int Y, char Char) {
+		super(X, Y, Char);
+	}
+	
+	public void Interact(int X, int Y) {
+		if(X == GetX() && Y == GetY()) {
+			if(!GameManager.GetInstance().isKeyHeld())
+				GameManager.GetInstance().setKeyHeld();
+			else {
+				GameManager.GetInstance().addScore(250);
+			}
+		}
+	}
+}

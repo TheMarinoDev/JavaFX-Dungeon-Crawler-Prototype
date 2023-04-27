@@ -1,0 +1,6 @@
+package application;
+
+public interface Interactable {
+
+	public void Interact(int X, int Y);
+}

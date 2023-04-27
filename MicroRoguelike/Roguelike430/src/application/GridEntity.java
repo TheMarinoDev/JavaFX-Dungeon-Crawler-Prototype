@@ -1,0 +1,39 @@
+package application;
+
+/*
+ * This class represents an object present on the game grid.
+ */
+public abstract class GridEntity {
+	protected int PosX; //X position on Grid
+	protected int PosY; //Y position on Grid
+	protected char GridChar; //used to determine what image represents this entity;
+	
+	public GridEntity(int X, int Y, char Char) {
+		PosX = X;
+		PosY = Y;
+		GridChar = Char;
+	}
+	
+	public void SetPosition(int X, int Y) {
+		if(GUIManager.getInstance() != null)
+			GUIManager.getInstance().DrawEntity(PosX, PosY, ' ');
+		PosX = X;
+		PosY = Y;
+		if(GUIManager.getInstance() != null)
+			GUIManager.getInstance().DrawEntity(PosX, PosY, GridChar);
+	}
+	
+	public int GetX() {
+		return PosX;
+	}
+	
+	public int GetY() {
+		return PosY;
+	}
+	
+	public char GetChar() {
+		return GridChar;
+	}
+	
+	public abstract void Interact(int X, int Y);
+}

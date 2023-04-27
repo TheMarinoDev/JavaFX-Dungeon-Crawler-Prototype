@@ -1,0 +1,23 @@
+package application;
+
+public class Key extends GridEntity implements Interactable{
+
+	public Key(int X, int Y, char Char) {
+		super(X, Y, Char);
+	}
+	
+	public void Interact(int X, int Y) {
+		if(X == GetX() && Y == GetY()) {
+			//Obtain the key
+			if(!GameManager.GetInstance().isKeyHeld())
+				GameManager.GetInstance().setKeyHeld();
+			else {
+				GameManager.GetInstance().addScore(250);
+			}
+			//Remove this object from the entity grid
+			GUIManager.getInstance().DrawEntity(PosX, PosY, ' ');
+			//Remove this object from the list of interactables
+			GameManager.GetInstance().GetCurrentLevel().GetCurrentRoom().GetEntities().remove(this);
+		}
+	}
+}
