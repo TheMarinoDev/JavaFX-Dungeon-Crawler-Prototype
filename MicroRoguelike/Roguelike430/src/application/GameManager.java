@@ -77,6 +77,13 @@ public class GameManager {
 		//update GUI
 		GUIManager.getInstance().UpdateGUIStats();
 	}
+	
+	public void removeSword() {
+		SwordHeld = false;
+		
+		//update GUI
+		GUIManager.getInstance().UpdateGUIStats();
+	}
 
 	public void addScore(int score) {
 		Score += score;

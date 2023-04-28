@@ -2,7 +2,7 @@
 <section name="Workbench">
 	<item key="org.eclipse.jdt.ui.last.selected.jre.kind2" value="2"/>
 	<item key="org.eclipse.jdt.ui.last.selected.execution.enviroment" value="JavaSE-17"/>
-	<item key="org.eclipse.jdt.ui.lastextjar" value="E:\CSC430\MicroRoguelike\JavaFX 20\javafx-sdk-20\lib"/>
+	<item key="org.eclipse.jdt.ui.lastextjar" value="C:\Users\anton\Documents\GitHub\CSC430-Mirco-Roguelike\MicroRoguelike\JavaFX 20\javafx-sdk-20\lib"/>
 	<item key="org.eclipse.jdt.ui.last.selected.create.moduleinfo.comments" value="false"/>
 	<item key="org.eclipse.jdt.ui.last.selected.create.moduleinfo" value="false"/>
 	<section name="org.eclipse.jdt.internal.ui.packageview.PackageExplorerPart">
@@ -88,5 +88,7 @@
 	</section>
 	<section name="SelfEncapsulateFieldWizard">
 		<item key="GenerateJavadoc" value="false"/>
+	</section>
+	<section name="org.eclipse.ltk.ui.refactoring.settings">
 	</section>
 </section>

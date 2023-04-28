@@ -112,6 +112,8 @@ public class Room {
 				Entities.add(i);				
 				break;
 			case 3://Spawn an Enemy		
+				Enemy e = new Enemy(c.getX(),c.getY(),'!');
+				Entities.add(e);				
 				break;
 		}
 		

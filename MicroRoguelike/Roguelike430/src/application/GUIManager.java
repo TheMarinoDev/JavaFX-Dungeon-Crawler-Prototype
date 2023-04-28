@@ -48,10 +48,17 @@ public class GUIManager {
     private ImageView KeyIcon;
     
     /*
-     * Level Scene
+     * Continue Scene
      * 
      */
     private Scene ContinueScene;
+    
+    /*
+     * GameOver Scene
+     * 
+     */
+    private Scene GameoverScene;
+    private Label FinalscoreLabel;
     
     private String ImageDirectory = "file:///E:/CSC430/MicroRoguelike/Roguelike430/src/application/Graphics/"; //Temporary: this is a quick work around.
     //Ideally the image should be able to be located without having to deal with the directory.
@@ -217,6 +224,35 @@ public class GUIManager {
         ContinueScene = new Scene(continueVbox, 640, 480); // Set the width and height of the scene
         
         
+        
+        
+        /* 
+		 * GAME OVER SCREEN
+		 * 
+		 */
+        Label gameoverLabel = new Label("GAME OVER!\n >YOU DIED<");
+        gameoverLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 24));
+        gameoverLabel.setTextAlignment(TextAlignment.CENTER); // Center the text
+
+        // Create a button with the label "Play Next Level"
+        Button gameoverButton = new Button("Return To Title");
+        
+        // Create a label that displays your score after you die
+        FinalscoreLabel = new Label("Final Score: 0");
+        FinalscoreLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 18));
+
+        // Create a VBox to hold the label and button
+        VBox gameoverVbox = new VBox(20); // Set the spacing between the components
+        gameoverVbox.getChildren().addAll(gameoverLabel, FinalscoreLabel, gameoverButton); // Add the two labels and button to the VBox
+        gameoverVbox.setAlignment(Pos.CENTER);
+        gameoverButton.setOnAction(e -> {
+        	setScene(TitleScene);
+        });
+
+        // Create a scene with the VBox as the root node
+        GameoverScene = new Scene(gameoverVbox, 640, 480); // Set the width and height of the scene
+        
+        
     }//
 	
 	/*
@@ -375,6 +411,8 @@ public class GUIManager {
     		SwordIcon.setImage(new Image(ImageDirectory + "empty.png"));
     	//Score
     	ScoreLabel.setText("Score: " + GM.getScore());
+    	HighscoreLabel.setText("Score: " + GM.getHighScore());
+    	FinalscoreLabel.setText("Final Score: " + GM.getScore());
     	LevelLabel.setText("Level " + GM.getLevel());
     }
     
@@ -398,6 +436,6 @@ public class GUIManager {
     	return ContinueScene;
     }
     public Scene getGameOverScene() {
-    	return TitleScene;
+    	return GameoverScene;
     }
 }

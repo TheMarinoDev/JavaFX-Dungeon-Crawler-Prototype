@@ -1,0 +1,133 @@
+package application;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
+public class Level {
+
+	private List<Room> Rooms;
+	private Room CurrentRoom;
+	private int NumRooms;
+	private int NumEnemies;
+	private int NumItems;
+	
+	/*
+	 * Default constructor
+	 */
+	public Level(int rooms, int enemies, int items) {
+		NumRooms = rooms;
+		NumEnemies = enemies;
+		NumItems = items;
+		
+		GenerateLevel();
+		
+		GUIManager.getInstance().DrawRoom(CurrentRoom.getLayout());
+		GUIManager.getInstance().DrawMiniMap(this, CurrentRoom.getX(), CurrentRoom.getY());
+	}
+	
+	public void GenerateLevel() {
+		
+		Rooms = new ArrayList<Room>();
+		//Start placing a starting room
+		Rooms.add(new Room(0,0));
+		
+		//Next loop NumRoom times starting at i = 1 to place the rest
+		for(int i = 0; i < NumRooms; i++) {
+			Cell pos = GetRandomAdjecentCell();
+			if(getRoomAt(pos.getX(),pos.getY()) == null)
+				Rooms.add(new Room(pos.getX(),pos.getY()));
+		}
+		
+		//Next, set the neighbors for each room
+		for(int i = 0; i < Rooms.size(); i++) {
+			Rooms.get(i).SetNeighbours(this);
+		}
+		
+		//Mark the ending room
+		Rooms.get(Rooms.size()-1).MarkEnd();
+		
+		//Place a key (the level cannot end without it)
+		Rooms.get(new Random().nextInt(Rooms.size())).SpawnEntity(0);
+		
+		//Place n enemies
+		for(int i = 0; i < NumEnemies; i++) {
+				Rooms.get(new Random().nextInt(Rooms.size())).SpawnEntity(3);
+		}
+		
+		//Place n items (n = 0 is a sword, the rest add points)
+		for(int i = 0; i < NumItems; i++) {
+			if(i == 0)
+				Rooms.get(new Random().nextInt(Rooms.size())).SpawnEntity(1);
+			else
+				Rooms.get(new Random().nextInt(Rooms.size())).SpawnEntity(2);
+		}
+		
+		CurrentRoom = Rooms.get(0);
+		CurrentRoom.CheckForEntered();
+		
+	}
+	
+	public void MoveToRoom(int X, int Y) {
+		if(!containsRoomAt(CurrentRoom.getX() + X,CurrentRoom.getY() + Y))return;
+		CurrentRoom = getRoomAt(CurrentRoom.getX() + X,CurrentRoom.getY() + Y);
+		
+		GUIManager.getInstance().DrawRoom(CurrentRoom.getLayout());
+		GUIManager.getInstance().DrawRoomEntities(CurrentRoom.GetEntities());
+		GUIManager.getInstance().DrawMiniMap(this, CurrentRoom.getX(), CurrentRoom.getY());
+		
+		CurrentRoom.CheckForEntered();
+	}
+	
+	private Cell GetRandomAdjecentCell()
+    {
+        List<Cell> AdjecentCells = new ArrayList<Cell>();
+        
+        for(int i = 0; i < Rooms.size(); i++) {
+        	
+        	//Define these adjacent cell positions
+        	Cell Up = new Cell(Rooms.get(i).getX(), Rooms.get(i).getY()+1);
+        	Cell Down = new Cell(Rooms.get(i).getX(), Rooms.get(i).getY()-1);
+        	Cell Left = new Cell(Rooms.get(i).getX()-1, Rooms.get(i).getY());
+        	Cell Right = new Cell(Rooms.get(i).getX()+1, Rooms.get(i).getY());
+        	
+        	//Check if they have been added to the list of adjacent cells already, if not then do add it
+        	if(getRoomAt(Up.getX(),Up.getY()) == null);
+        		AdjecentCells.add(Up);
+        	
+        	if(getRoomAt(Down.getX(),Down.getY()) == null)
+        		AdjecentCells.add(Down);
+        	
+        	if(getRoomAt(Right.getX(),Right.getY()) == null)
+        		AdjecentCells.add(Right);
+        	
+        	if(getRoomAt(Left.getX(),Left.getY()) == null)
+        		AdjecentCells.add(Left);
+        }
+
+        //Return a random cell from the list
+        int randomIndex = new Random().nextInt(AdjecentCells.size());
+        return AdjecentCells.get(randomIndex);
+    }
+	
+	public boolean containsRoomAt(int X, int Y) {
+		
+		for(int i = 0; i < Rooms.size(); i++)
+			if(Rooms.get(i).getX() == X && Rooms.get(i).getY() == Y)
+				return true;
+		return false;
+	}
+	
+	public Room getRoomAt(int X, int Y) {
+		
+		for(int i = 0; i < Rooms.size(); i++)
+			if(Rooms.get(i).getX() == X && Rooms.get(i).getY() == Y)
+				return Rooms.get(i);
+		return null;
+	}
+	
+	public Room GetCurrentRoom() {
+		return CurrentRoom;
+	}
+	
+}

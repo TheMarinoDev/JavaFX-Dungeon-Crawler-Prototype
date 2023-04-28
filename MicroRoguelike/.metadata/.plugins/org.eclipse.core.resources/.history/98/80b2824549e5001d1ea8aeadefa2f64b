@@ -1,0 +1,36 @@
+package application;
+
+public class Enemy extends GridEntity{
+
+	private boolean isAlive;
+	public Enemy(int X, int Y, char Char) {
+		super(X, Y, Char);
+		isAlive = true;
+	}
+
+	@Override
+	public void Interact(int X, int Y) {
+		// TODO Auto-generated method stub
+		
+		if(!isAlive) return;//do nothing if this enemy is dead
+		/*
+		 * A Star Pathfinding Algorithm
+		 * 
+		 * Every time the player moves, this enemy will use A* to approach the player
+		 */
+		
+		
+		//Move
+		SetPosition(X,Y);
+		
+		//Check for what do to
+		if(X == GameManager.GetInstance().getPlayer().GetX() && Y == GameManager.GetInstance().getPlayer().GetY() ) {
+			//The enemy is touching the player
+			if(GameManager.GetInstance().isSwordHeld()) {
+				//die, you have been smited!
+				isAlive = false;
+				
+			}
+		}
+	}
+}

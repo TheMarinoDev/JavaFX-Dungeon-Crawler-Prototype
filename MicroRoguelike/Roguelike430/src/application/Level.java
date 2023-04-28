@@ -48,16 +48,22 @@ public class Level {
 		Rooms.get(Rooms.size()-1).MarkEnd();
 		
 		//Place a key (the level cannot end without it)
-		Rooms.get(new Random().nextInt(Rooms.size())).SpawnEntity(0);
+		//Any room except the first or last one
+		Rooms.get(new Random().nextInt(Rooms.size()-2)+1).SpawnEntity(0);
 		
 		//Place n enemies
+		for(int i = 0; i < NumEnemies; i++) {
+			//Spawn in any room except the first and last one
+				Rooms.get(new Random().nextInt(Rooms.size() - 2)+1).SpawnEntity(3);
+		}
 		
 		//Place n items (n = 0 is a sword, the rest add points)
 		for(int i = 0; i < NumItems; i++) {
+			//Any room except the first one
 			if(i == 0)
-				Rooms.get(new Random().nextInt(Rooms.size())).SpawnEntity(1);
+				Rooms.get(new Random().nextInt(Rooms.size()-1)+1).SpawnEntity(1);
 			else
-				Rooms.get(new Random().nextInt(Rooms.size())).SpawnEntity(2);
+				Rooms.get(new Random().nextInt(Rooms.size()-1)+1).SpawnEntity(2);
 		}
 		
 		CurrentRoom = Rooms.get(0);
