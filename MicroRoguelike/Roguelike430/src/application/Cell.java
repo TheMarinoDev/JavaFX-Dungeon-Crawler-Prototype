@@ -1,8 +1,8 @@
 package application;
 
 public class Cell {
-    private int x;
-    private int y;
+    protected int x;
+    protected int y;
 
     public Cell() {
     }
@@ -25,5 +25,8 @@ public class Cell {
 
     public void setY(int y) {
         this.y = y;
+    }
+    public boolean equals(Cell c) {
+    	return c.getX() == x && c.getY() == y;
     }
 }

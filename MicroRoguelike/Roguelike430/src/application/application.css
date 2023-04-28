@@ -1,1 +1,13 @@
-/* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
+.root {
+    -fx-background-color: #000040;
+}
+
+/* Sets the text color for all controls */
+.text {
+    -fx-fill: white;
+}
+
+/* Sets the text color for all labels */
+.label {
+    -fx-text-fill: white;
+}

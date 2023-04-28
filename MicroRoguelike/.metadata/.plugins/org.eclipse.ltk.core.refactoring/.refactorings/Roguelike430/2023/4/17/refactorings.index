@@ -2,3 +2,4 @@
 1682386946161	Encapsulate field 'thePlayer'
 1682633060538	Rename field 'FinalScore'
 1682633133486	Rename field 'FinalScoreLabel'
+1682668717863	Rename local variable 'goal'
