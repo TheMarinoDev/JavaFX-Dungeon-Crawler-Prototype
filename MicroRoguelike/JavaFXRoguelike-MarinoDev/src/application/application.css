@@ -1,0 +1,31 @@
+.root {
+    -fx-background-color: #1e1c32;
+}
+
+/* Sets the text color for all controls */
+.text {
+    -fx-fill: #c6baac;
+}
+
+/* Sets the text color for all labels */
+.label {
+    -fx-text-fill: #c6baac;
+}
+/* Button styling */
+.button {
+    -fx-background-color: #333354;  /* Dark background for buttons */
+    -fx-text-fill: #c6baac;         /* Button text color */
+    -fx-background-radius: 5;       /* Rounded corners */
+    -fx-border-color: #c6baac;      /* Border color */
+    -fx-border-width: 2px;          /* Border width */
+    -fx-border-radius: 5;           /* Border rounded to match background radius */
+    -fx-padding: 8 15;              /* Padding inside the button */
+    -fx-font-size: 14px;            /* Font size */
+}
+
+/* Button hover effect */
+.button:hover {
+    -fx-background-color: #464775;  /* Lighter background on hover */
+    -fx-border-color: #ffcb9a;      /* Change border color on hover */
+    -fx-text-fill: #ffcb9a;         /* Text color on hover */
+}
