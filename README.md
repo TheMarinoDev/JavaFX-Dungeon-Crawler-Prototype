@@ -4,5 +4,6 @@ Originally a school project aimed at understanding how to make a grid based game
 When importing, select the "MicroRoguelike" folder, JavaFX is included but I have not tested how seemless the import process is.
 # Alex's Dungeon Wander
 ![image](https://github.com/user-attachments/assets/1552cbdc-ab26-4f32-b57a-6a56bef9414a)
+
 Art assets are made by me, Alex (Wanderer) is also a character created by me.
 
