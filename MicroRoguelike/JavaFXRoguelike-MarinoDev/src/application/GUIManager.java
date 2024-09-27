@@ -1,5 +1,6 @@
 package application;
 	
+import java.net.URL;
 import java.util.List;
 
 import javafx.geometry.Insets;
@@ -61,7 +62,7 @@ public class GUIManager {
     private Scene GameoverScene;
     private Label FinalscoreLabel;
     
-    private String ImageDirectory = "file:///E:/CSC430/MicroRoguelike/Roguelike430/src/application/Graphics/"; //Temporary: this is a quick work around.
+    private URL ImageDirectory; //Temporary: this is a quick work around.
     //Ideally the image should be able to be located without having to deal with the directory.
     
     /*
@@ -77,7 +78,7 @@ public class GUIManager {
 		 * TITLE SCREEN
 		 * 
 		 */
-		ImageDirectory = "file:/" + System.getProperty("user.dir") + "/src/application/Graphics/";
+		ImageDirectory = getClass().getResource("/application/Graphics/");
 		// Create title label
         Label titleLabel = new Label("Alex's Dungeon Wanderer");
         titleLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 24));
